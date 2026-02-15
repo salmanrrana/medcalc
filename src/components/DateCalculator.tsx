@@ -10,8 +10,9 @@ interface DateCalculatorProps {
   calculateDay: (startDate: Date, targetDate: Date) => number | null
 }
 
-const DATE_INPUT_CLASS = 'w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-400 focus:border-transparent outline-none transition-all focus:ring-offset-2'
-const QUICK_SET_BUTTON_CLASS = 'flex-1 px-4 py-2 bg-gray-200 hover:bg-gray-300 text-gray-900 font-medium rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-offset-2'
+const FOCUS_RING = 'focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-offset-2'
+const DATE_INPUT_CLASS = `w-full px-4 py-3 border border-gray-300 rounded-lg focus:border-transparent outline-none transition-all ${FOCUS_RING}`
+const QUICK_SET_BUTTON_CLASS = `flex-1 px-4 py-2 bg-gray-200 hover:bg-gray-300 text-gray-900 font-medium rounded-lg transition-colors ${FOCUS_RING}`
 
 function formatDateForInput(date: Date): string {
   if (!(date instanceof Date)) {
@@ -82,26 +83,13 @@ export default function DateCalculator({
     }
   }, [result, resultError])
 
-  const handleSetToday = () => {
+  function handleQuickSet(label: string, date: Date): void {
     try {
-      const today = new Date()
-      setTargetDateInput(formatDateForInput(today))
+      setTargetDateInput(formatDateForInput(date))
       setButtonError(null)
     } catch (error) {
-      const message = 'Failed to set date to today. Please use the date picker instead.'
-      console.error('Failed to set date to today:', error)
-      setButtonError(message)
-    }
-  }
-
-  const handleSetTomorrow = () => {
-    try {
-      const tomorrow = addDays(new Date(), 1)
-      setTargetDateInput(formatDateForInput(tomorrow))
-      setButtonError(null)
-    } catch (error) {
-      const message = 'Failed to set date to tomorrow. Please use the date picker instead.'
-      console.error('Failed to set date to tomorrow:', error)
+      const message = `Failed to set date to ${label}. Please use the date picker instead.`
+      console.error(`Failed to set date to ${label}:`, error)
       setButtonError(message)
     }
   }
@@ -141,14 +129,14 @@ export default function DateCalculator({
             />
             <div className="flex gap-2">
               <button
-                onClick={handleSetToday}
+                onClick={() => handleQuickSet('today', new Date())}
                 className={QUICK_SET_BUTTON_CLASS}
                 aria-label="Set target date to today"
               >
                 Today
               </button>
               <button
-                onClick={handleSetTomorrow}
+                onClick={() => handleQuickSet('tomorrow', addDays(new Date(), 1))}
                 className={QUICK_SET_BUTTON_CLASS}
                 aria-label="Set target date to tomorrow"
               >
@@ -172,7 +160,7 @@ export default function DateCalculator({
         <div
           ref={resultRef}
           tabIndex={-1}
-          className="p-8 bg-gray-50 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-offset-2"
+          className={`p-8 bg-gray-50 border-2 border-gray-300 rounded-lg ${FOCUS_RING}`}
           role="region"
           aria-live="polite"
           aria-label={`${resultLabel}: ${result} ${result === 1 ? 'day' : 'days'}`}
