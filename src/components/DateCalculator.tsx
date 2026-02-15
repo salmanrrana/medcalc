@@ -92,7 +92,7 @@ export default function DateCalculator({
   }
 
   return (
-    <div className="w-full max-w-2xl mx-auto px-6 py-8 md:py-12 space-y-8">
+    <div className="space-y-8">
       <div>
         <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-3">{title}</h2>
         <p className="text-lg md:text-xl text-gray-600 leading-relaxed">{description}</p>

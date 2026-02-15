@@ -8,7 +8,7 @@ export const Route = createFileRoute('/chemo')({
 
 function ChemoPage() {
   return (
-    <div className="min-h-screen bg-white p-6">
+    <div className="min-h-screen bg-white py-8 md:py-12 px-6">
       <div className="max-w-2xl mx-auto">
         <DateCalculator
           title="Chemotherapy Day Calculator"
