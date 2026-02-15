@@ -1,4 +1,4 @@
-import { useId, useState } from 'react'
+import { useId, useState, useRef, useEffect } from 'react'
 import { parseISO, isValid, format, addDays } from 'date-fns'
 
 interface DateCalculatorProps {
@@ -10,8 +10,8 @@ interface DateCalculatorProps {
   calculateDay: (startDate: Date, targetDate: Date) => number | null
 }
 
-const DATE_INPUT_CLASS = 'w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-400 focus:border-transparent outline-none transition-all'
-const QUICK_SET_BUTTON_CLASS = 'flex-1 px-4 py-2 bg-gray-200 hover:bg-gray-300 text-gray-900 font-medium rounded-lg transition-colors'
+const DATE_INPUT_CLASS = 'w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-400 focus:border-transparent outline-none transition-all focus:ring-offset-2'
+const QUICK_SET_BUTTON_CLASS = 'flex-1 px-4 py-2 bg-gray-200 hover:bg-gray-300 text-gray-900 font-medium rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-offset-2'
 
 function formatDateForInput(date: Date): string {
   if (!(date instanceof Date)) {
@@ -54,6 +54,7 @@ export default function DateCalculator({
   const [startDateInput, setStartDateInput] = useState('')
   const [targetDateInput, setTargetDateInput] = useState(() => formatDateForInput(new Date()))
   const [buttonError, setButtonError] = useState<string | null>(null)
+  const resultRef = useRef<HTMLDivElement>(null)
 
   const startDate = parseDate(startDateInput)
   const targetDate = parseDate(targetDateInput)
@@ -73,6 +74,13 @@ export default function DateCalculator({
       resultError = 'Unable to calculate days. Both dates must be valid. Please verify your entries.'
     }
   }
+
+  // Announce result changes to screen readers
+  useEffect(() => {
+    if (result !== null && !resultError && resultRef.current) {
+      resultRef.current.focus()
+    }
+  }, [result, resultError])
 
   const handleSetToday = () => {
     try {
@@ -161,7 +169,14 @@ export default function DateCalculator({
       )}
 
       {result !== null && !resultError && (
-        <div className="p-8 bg-gray-50 border-2 border-gray-300 rounded-lg">
+        <div
+          ref={resultRef}
+          tabIndex={-1}
+          className="p-8 bg-gray-50 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-offset-2"
+          role="region"
+          aria-live="polite"
+          aria-label={`${resultLabel}: ${result} ${result === 1 ? 'day' : 'days'}`}
+        >
           <p className="text-sm font-medium text-gray-600 mb-3">{resultLabel}</p>
           <p className="text-6xl md:text-7xl font-bold text-gray-900">
             {result}

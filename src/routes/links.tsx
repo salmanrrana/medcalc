@@ -116,8 +116,8 @@ function LinkCard({ title, url, description }: Link) {
       href={url}
       target="_blank"
       rel="noopener noreferrer"
-      className="p-6 border border-gray-200 rounded-lg hover:border-gray-400 hover:shadow-md focus:ring-2 focus:ring-gray-400 focus:ring-offset-2 transition-all bg-white outline-none"
-      aria-label={`${title} (opens in new window)`}
+      className="block p-6 border border-gray-200 rounded-lg hover:border-gray-400 hover:shadow-md focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-offset-2 transition-all bg-white"
+      aria-label={`${title} - opens in new window`}
     >
       <h3 className="text-lg font-semibold text-gray-900 mb-2 hover:text-gray-700 transition-colors">
         {title}
@@ -140,14 +140,14 @@ function LinksPage() {
         </p>
         <div className="space-y-14 md:space-y-16">
           {LINK_CATEGORIES.map((category) => (
-            <div key={category.name}>
+            <section key={category.name}>
               <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-6 md:mb-8">{category.name}</h2>
               <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
                 {category.links.map((link) => (
                   <LinkCard key={link.url} {...link} />
                 ))}
               </div>
-            </div>
+            </section>
           ))}
         </div>
       </div>

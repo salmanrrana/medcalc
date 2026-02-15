@@ -4,7 +4,7 @@ import { Calendar, Pill, Link as LinkIcon } from 'lucide-react'
 
 export const Route = createFileRoute('/')({ component: HomePage })
 
-const CARD_CLASS = 'block p-8 bg-white rounded-lg border border-gray-200 hover:border-gray-400 hover:shadow-md transition-all'
+const CARD_CLASS = 'block p-8 bg-white rounded-lg border border-gray-200 hover:border-gray-400 hover:shadow-md focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-offset-2 transition-all'
 
 interface FeatureCard {
   to: string
@@ -38,7 +38,7 @@ function FeatureCard({ to, icon: Icon, title, description }: FeatureCard) {
   return (
     <Link to={to} className={CARD_CLASS}>
       <div className="flex items-start gap-4">
-        <Icon className="w-8 h-8 text-gray-700 flex-shrink-0 mt-1" />
+        <Icon className="w-8 h-8 text-gray-700 flex-shrink-0 mt-1" aria-hidden="true" />
         <div className="text-left">
           <h2 className="text-xl md:text-2xl font-semibold text-gray-900 mb-2">{title}</h2>
           <p className="text-gray-600 text-sm md:text-base">{description}</p>
