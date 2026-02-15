@@ -19,7 +19,18 @@ function isValidUrl(urlString: string): boolean {
   try {
     const url = new URL(urlString)
     return url.protocol === 'https:' || url.protocol === 'http:'
-  } catch {
+  } catch (error) {
+    // Expected error: invalid URL format
+    if (error instanceof TypeError) {
+      return false
+    }
+
+    // Unexpected error - log for debugging
+    console.error('Unexpected error validating URL:', {
+      url: urlString,
+      error: error instanceof Error ? error.message : String(error),
+    })
+
     return false
   }
 }

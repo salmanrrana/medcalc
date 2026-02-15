@@ -200,7 +200,7 @@
     {
       "id": "5372104c-7ecd-4eff-9cc4-9ee71a5c2125",
       "title": "Phase 4: Mobile device testing",
-      "passes": false,
+      "passes": true,
       "overview": "",
       "types": [],
       "designDecisions": [],

@@ -53,6 +53,7 @@ export default function DateCalculator({
   const id = useId()
   const [startDateInput, setStartDateInput] = useState('')
   const [targetDateInput, setTargetDateInput] = useState(() => formatDateForInput(new Date()))
+  const [buttonError, setButtonError] = useState<string | null>(null)
 
   const startDate = parseDate(startDateInput)
   const targetDate = parseDate(targetDateInput)
@@ -77,8 +78,11 @@ export default function DateCalculator({
     try {
       const today = new Date()
       setTargetDateInput(formatDateForInput(today))
+      setButtonError(null)
     } catch (error) {
+      const message = 'Failed to set date to today. Please use the date picker instead.'
       console.error('Failed to set date to today:', error)
+      setButtonError(message)
     }
   }
 
@@ -86,8 +90,11 @@ export default function DateCalculator({
     try {
       const tomorrow = addDays(new Date(), 1)
       setTargetDateInput(formatDateForInput(tomorrow))
+      setButtonError(null)
     } catch (error) {
+      const message = 'Failed to set date to tomorrow. Please use the date picker instead.'
       console.error('Failed to set date to tomorrow:', error)
+      setButtonError(message)
     }
   }
 
@@ -140,6 +147,9 @@ export default function DateCalculator({
                 Tomorrow
               </button>
             </div>
+            {buttonError && (
+              <p className="text-red-600 text-sm font-medium" role="alert">{buttonError}</p>
+            )}
           </div>
         </div>
       </div>
