@@ -1,6 +1,23 @@
 import { differenceInDays, isValid } from 'date-fns'
 
 /**
+ * Calculate the day difference between two dates, returning null if either is invalid.
+ *
+ * @param offset - Added to the raw difference (0 for day-0 counting, 1 for day-1 counting)
+ */
+function daysSince(
+  startDate: Date,
+  targetDate: Date,
+  offset: number
+): number | null {
+  if (!isValid(startDate) || !isValid(targetDate)) {
+    return null
+  }
+
+  return differenceInDays(targetDate, startDate) + offset
+}
+
+/**
  * Calculate the number of days since a transplant date.
  * Day 0 = transplant day, Day 1 = next day, etc.
  *
@@ -12,15 +29,7 @@ export function transplantDaysSince(
   transplantDate: Date,
   targetDate: Date = new Date()
 ): number | null {
-  // Validate both dates
-  if (!isValid(transplantDate) || !isValid(targetDate)) {
-    return null
-  }
-
-  // Calculate the difference in days
-  const days = differenceInDays(targetDate, transplantDate)
-
-  return days
+  return daysSince(transplantDate, targetDate, 0)
 }
 
 /**
@@ -35,14 +44,5 @@ export function chemoDaysSince(
   firstChemoDate: Date,
   targetDate: Date = new Date()
 ): number | null {
-  // Validate both dates
-  if (!isValid(firstChemoDate) || !isValid(targetDate)) {
-    return null
-  }
-
-  // Calculate the difference in days
-  const days = differenceInDays(targetDate, firstChemoDate)
-
-  // Add 1 so first chemo day = day 1
-  return days + 1
+  return daysSince(firstChemoDate, targetDate, 1)
 }

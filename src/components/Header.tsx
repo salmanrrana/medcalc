@@ -1,7 +1,8 @@
 import { Link } from '@tanstack/react-router'
 
 import { useState } from 'react'
-import { Home, Menu, X, Calendar, Pill, Link as LinkIcon, LucideIcon } from 'lucide-react'
+import type { LucideIcon } from 'lucide-react'
+import { Home, Menu, X, Calendar, Pill, Link as LinkIcon } from 'lucide-react'
 
 const NAV_LINK_CLASS = 'flex items-center gap-3 p-3 rounded-lg hover:bg-gray-800 transition-colors mb-2'
 const NAV_LINK_ACTIVE_CLASS = 'flex items-center gap-3 p-3 rounded-lg bg-cyan-600 hover:bg-cyan-700 transition-colors mb-2'

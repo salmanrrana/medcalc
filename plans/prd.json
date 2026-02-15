@@ -74,7 +74,7 @@
     {
       "id": "db4cec22-2b06-4bcc-8403-e6e34bd3e678",
       "title": "Phase 2: Implement transplant calculator logic",
-      "passes": false,
+      "passes": true,
       "overview": "",
       "types": [],
       "designDecisions": [],
@@ -95,7 +95,7 @@
     {
       "id": "ae96ec97-e3b8-4b55-ab01-b1a1cdd4bdfa",
       "title": "Phase 2: Implement chemotherapy calculator logic",
-      "passes": false,
+      "passes": true,
       "overview": "",
       "types": [],
       "designDecisions": [],
@@ -116,7 +116,7 @@
     {
       "id": "1848ee68-8e84-46ef-98f6-23b89bf3c368",
       "title": "Phase 2: Build DateCalculator component",
-      "passes": false,
+      "passes": true,
       "overview": "",
       "types": [],
       "designDecisions": [],

@@ -1,5 +1,6 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
-import { Calendar, Pill, Link as LinkIcon, LucideIcon } from 'lucide-react'
+import type { LucideIcon } from 'lucide-react'
+import { Calendar, Pill, Link as LinkIcon } from 'lucide-react'
 
 export const Route = createFileRoute('/')({ component: HomePage })
 
