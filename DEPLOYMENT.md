@@ -1,202 +1,205 @@
 # MedCalc Deployment Guide
 
-This guide covers deploying MedCalc to production using Netlify, Surge.sh, or GitHub Pages.
+MedCalc is built with TanStack Start and Nitro, which provides server-side rendering (SSR). This requires deployment to a platform that supports Node.js runtime.
 
-## Quick Start - Netlify (Recommended)
+## Deployment Platforms
 
-### Prerequisites
-- GitHub account
-- Netlify account (free tier available)
-- Project pushed to GitHub
+### Recommended: Vercel (Best for TanStack Start)
 
-### Deployment Steps
+**Why Vercel:**
+- Native support for TanStack Start and Nitro SSR
+- Automatic deployment from GitHub
+- Free tier with generous limits
+- HTTPS included
+- Zero-config deployment
 
-1. **Create Netlify Account**
-   - Go to [netlify.com](https://netlify.com)
-   - Sign up or log in with GitHub
+**Steps:**
 
-2. **Connect Repository**
-   - Click "New site from Git"
-   - Select GitHub and authorize Netlify
-   - Choose the medcalc repository
-   - Click "Import an existing project"
+1. **Create Vercel Account**
+   - Go to [vercel.com](https://vercel.com)
+   - Sign up with GitHub
 
-3. **Configure Build Settings**
-   - Build command: `pnpm build`
-   - Publish directory: `.output/public`
-   - Node version: `20` (set in netlify.toml)
-
-4. **Deploy**
-   - Click "Deploy site"
-   - Netlify will automatically build and deploy on every push to main branch
-
-5. **Verify Deployment**
-   - Visit the auto-generated Netlify URL
-   - Test all calculator pages
-   - Verify links page works
-   - Check browser console for errors
-
-6. **Custom Domain (Optional)**
-   - Go to Site settings → Domain management
-   - Add custom domain
-   - Update DNS records as instructed by Netlify
-   - HTTPS is automatically enabled with Netlify's free SSL
-
-## Alternative: Surge.sh
-
-### Prerequisites
-- Node.js installed
-- Surge account (free at surge.sh)
-
-### Deployment Steps
-
-1. **Install Surge CLI**
-   ```bash
-   npm install -g surge
-   ```
-
-2. **Build the Project**
-   ```bash
-   pnpm build
-   ```
+2. **Import Project**
+   - Click "Add New..." → "Project"
+   - Select the medcalc repository
+   - Click "Import"
 
 3. **Deploy**
-   ```bash
-   surge .output/public
-   ```
+   - Vercel automatically detects TanStack Start
+   - Environment variable `NITRO_PRESET=vercel` is set automatically
+   - Click "Deploy"
+   - Your app is live in ~1 minute
 
-4. **Follow Prompts**
-   - Enter email (for Surge account)
-   - Set domain (e.g., medcalc-app.surge.sh)
-   - Confirm deployment
+4. **Custom Domain (Optional)**
+   - Go to Project Settings → Domains
+   - Add custom domain
+   - Update DNS as instructed
+   - HTTPS is automatic
 
 5. **Verify Deployment**
-   - Visit your surge.sh domain
-   - Test all features
+   - Visit your Vercel URL
+   - Test all calculator functions
+   - Check browser console (F12) for errors
+   - Test on mobile device
 
-## Alternative: GitHub Pages
+### Alternative: Netlify (With Configuration)
 
-### Prerequisites
-- GitHub repository
-- GitHub account
+**Note:** Netlify's serverless functions require configuration. Use Vercel if possible.
 
-### Deployment Steps
+**Steps:**
 
-1. **Add GitHub Actions Workflow**
-   Create `.github/workflows/deploy.yml`:
-   ```yaml
-   name: Deploy to GitHub Pages
+1. Create account at [netlify.com](https://netlify.com)
 
-   on:
-     push:
-       branches: [ main ]
+2. Connect GitHub repository:
+   - Click "Add new site" → "Import an existing project" → "GitHub"
+   - Select medcalc repository
 
-   jobs:
-     build-and-deploy:
-       runs-on: ubuntu-latest
-       steps:
-         - uses: actions/checkout@v3
-         - uses: pnpm/action-setup@v2
-         - uses: actions/setup-node@v3
-           with:
-             node-version: '20'
-             cache: 'pnpm'
-         - run: pnpm install
-         - run: pnpm build
-         - uses: actions/upload-artifact@v3
-           with:
-             name: build
-             path: .output/public
-         - uses: peaceiris/actions-gh-pages@v3
-           with:
-             github_token: ${{ secrets.GITHUB_TOKEN }}
-             publish_dir: .output/public
-   ```
+3. Configure Build:
+   - Build command: `pnpm build`
+   - Publish directory: `.output/public`
+   - Environment: `NITRO_PRESET=netlify`
 
-2. **Configure Repository Settings**
-   - Go to Settings → Pages
-   - Source: Deploy from a branch
-   - Branch: `gh-pages` / `/(root)`
+4. Deploy
 
-3. **Push to Main**
-   - Commit and push the workflow file
-   - GitHub Actions will automatically build and deploy
+5. Verify (same as Vercel)
 
-4. **Access Your Site**
-   - GitHub Pages URL: `https://username.github.io/medcalc`
+### Alternative: Self-Hosted (Advanced)
 
-## Acceptance Criteria Checklist
+If you have a Node.js server:
 
-- [x] Production build successful (`pnpm build` passes)
-- [ ] App deployed and accessible via URL
-- [ ] All features work on live deployment (test manually):
-  - [ ] Home page loads
-  - [ ] Transplant calculator works
-  - [ ] Chemo calculator works
-  - [ ] Links page displays
-  - [ ] Navigation works between pages
-  - [ ] Date calculations are accurate
-  - [ ] Mobile layout is responsive
-- [ ] HTTPS enforced (automatic with Netlify)
-- [ ] No console errors in browser (check DevTools)
-- [ ] All routes work correctly (home, transplant, chemo, links)
+```bash
+pnpm build
+node .output/server/index.mjs
+```
+
+The server runs on port 3000 by default.
+
+## Deployment Checklist
+
+Before deploying, ensure:
+
+- [ ] Code committed and pushed to GitHub
+- [ ] Local build succeeds: `pnpm build`
+- [ ] Tests pass: `pnpm test`
+- [ ] No console errors in development
+- [ ] All routes tested locally
+
+After deploying:
+
+- [ ] Site loads without errors
+- [ ] Can navigate to all pages (/, /transplant, /chemo, /links)
+- [ ] Calculators work correctly with sample dates
+- [ ] No red errors in browser console
+- [ ] HTTPS enforced (green lock icon)
+- [ ] Mobile layout is responsive
 
 ## Troubleshooting
 
-### Build Fails
-- Check Node version: `node --version` (should be 18+)
-- Check pnpm version: `pnpm --version`
-- Clear cache: `rm -rf node_modules pnpm-lock.yaml && pnpm install`
+### Site shows blank page
 
-### Routes Not Working
-- Ensure netlify.toml redirects rule is present
-- GitHub Pages needs asset paths configured (use relative paths)
+**Cause:** Server-side rendering error
+**Fix:**
+- Check Vercel/Netlify deployment logs
+- Look for error messages in build output
+- Verify `NITRO_PRESET` environment variable is set
 
-### Performance Issues
-- Check bundle size in `.output/public/assets`
-- Main bundle should be under 200KB gzipped
-- CSS should be under 30KB gzipped
+### Routes return 404
 
-### Mobile Issues
-- Test on actual devices via deployment URL
-- Check viewport meta tag in HTML
-- Verify touch targets are 44x44px minimum
+**Cause:** Routing misconfiguration
+**Fix:**
+- Ensure you're on the deployed URL (not localhost)
+- Check that TanStack Router is configured correctly
+- Verify all route files exist in `src/routes/`
 
-## Monitoring Deployed Site
+### Calculations not working
 
-1. **Netlify Dashboard**
-   - Monitor deploy logs
-   - Check deploy previews
-   - View analytics (Pro plan)
+**Cause:** JavaScript error or date-fns issue
+**Fix:**
+- Open DevTools console (F12)
+- Look for red error messages
+- Check browser console for specific errors
+- Verify date input format is correct
 
-2. **Browser Testing**
-   - Test all pages
-   - Check network tab for slow requests
-   - Verify no console errors
+### Performance issues
 
-3. **Lighthouse Audit**
-   - Run Lighthouse on deployed URL
-   - Target: Performance > 80, Accessibility > 95
+**Cause:** Slow bundle load
+**Fix:**
+- Check bundle size: should be ~200KB gzipped for main JS
+- Verify CSS is under 30KB
+- Check network waterfall in DevTools
+- Consider code splitting if needed
 
-## Rollback
+## Rollback (Undo Deployment)
+
+### Vercel
+1. Go to Deployments tab
+2. Click on previous successful deployment
+3. Click "Promote to Production"
 
 ### Netlify
-- Go to Deploys tab
-- Click on previous deploy
-- Click "Publish deploy"
+1. Go to Deploys tab
+2. Find last working deployment
+3. Click "Publish deploy"
 
-### Surge
-- Deploy previous build again
-- Use same domain name
+## Production Best Practices
 
-### GitHub Pages
-- Revert commit and push
-- GitHub Actions will auto-redeploy
+### Monitoring (Optional)
+
+Add error tracking for production issues:
+
+```javascript
+// In src/entry-client.tsx
+import * as Sentry from "@sentry/react";
+
+Sentry.init({
+  dsn: "YOUR_SENTRY_DSN",
+  environment: "production",
+});
+```
+
+### Analytics (Optional)
+
+Track user interactions:
+
+```javascript
+// Add your analytics service of choice
+// Example: Google Analytics, Vercel Analytics, etc.
+```
+
+### Environment Variables
+
+For sensitive values (API keys, etc), use platform's secret management:
+
+**Vercel:** Settings → Environment Variables
+**Netlify:** Site settings → Build & deploy → Environment
+
+## Architecture Notes
+
+- **Framework:** TanStack Start (React 19 + TypeScript)
+- **Styling:** Tailwind CSS
+- **Routing:** TanStack Router
+- **Date Handling:** date-fns
+- **SSR:** Nitro server-side rendering
+- **Build Tool:** Vite with optimized bundling
+
+The SSR architecture ensures:
+- Fast initial page load (HTML generated on server)
+- SEO-friendly content
+- Reduced client-side JavaScript
+- Better performance on slow networks
 
 ## Next Steps
 
-1. Choose preferred deployment platform
-2. Follow platform-specific setup steps
-3. Test all features on live deployment
-4. Monitor for errors and performance
-5. Share deployment URL with stakeholders
+1. Choose deployment platform (Vercel recommended)
+2. Follow platform-specific setup
+3. Deploy your branch
+4. Test all features on live site
+5. Share URL with stakeholders
+
+## Questions?
+
+Refer to:
+- [TanStack Start Docs](https://tanstack.com/start/latest)
+- [Vercel Docs](https://vercel.com/docs)
+- [Netlify Docs](https://docs.netlify.com)
+- [Nitro Docs](https://nitro.unjs.io)

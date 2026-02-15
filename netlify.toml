@@ -1,21 +1,22 @@
+# Netlify configuration for MedCalc
+# NOTE: This project uses TanStack Start with Nitro SSR (server-side rendering)
+# For full SSR support on Netlify, configure: NITRO_PRESET=netlify pnpm build
+# For production, Vercel (vercel.json) is recommended for automatic SSR deployment
+
 [build]
   command = "pnpm build"
   publish = ".output/public"
 
-[functions]
-  directory = ".output/server"
-
-[[redirects]]
-  from = "/*"
-  to = "/index.html"
-  status = 200
-
 [env]
   NODE_VERSION = "20"
 
+# Security headers for medical calculator application
 [[headers]]
   for = "/*"
   [headers.values]
+    X-Frame-Options = "DENY"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
     Cache-Control = "public, max-age=3600"
 
 [[headers]]

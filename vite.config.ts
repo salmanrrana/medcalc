@@ -25,7 +25,10 @@ export default defineConfig({
   },
   plugins: [
     devtools(),
-    nitro({ rollupConfig: { external: [/^@sentry\//] } }),
+    nitro({
+      preset: process.env.NITRO_PRESET || 'node-server',
+      rollupConfig: { external: [/^@sentry\//] }
+    }),
     viteTsConfigPaths({ projects: ['./tsconfig.json'] }),
     tailwindcss(),
     tanstackStart(),
