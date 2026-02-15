@@ -4,8 +4,8 @@ import { useState } from 'react'
 import type { LucideIcon } from 'lucide-react'
 import { Home, Menu, X, Calendar, Pill, Link as LinkIcon } from 'lucide-react'
 
-const NAV_LINK_CLASS = 'flex items-center gap-3 p-3 rounded-lg hover:bg-gray-800 transition-colors mb-2'
-const NAV_LINK_ACTIVE_CLASS = 'flex items-center gap-3 p-3 rounded-lg bg-cyan-600 hover:bg-cyan-700 transition-colors mb-2'
+const NAV_LINK_CLASS = 'flex items-center gap-3 p-3 rounded-lg text-gray-700 hover:bg-gray-100 transition-colors mb-2'
+const NAV_LINK_ACTIVE_CLASS = 'flex items-center gap-3 p-3 rounded-lg bg-gray-200 text-gray-900 font-medium transition-colors mb-2'
 
 interface NavItem {
   to: string
@@ -26,31 +26,49 @@ export default function Header() {
 
   return (
     <>
-      <header className="p-4 flex items-center bg-gray-800 text-white shadow-lg">
-        <button
-          onClick={() => setIsOpen(true)}
-          className="p-2 hover:bg-gray-700 rounded-lg transition-colors"
-          aria-label="Open menu"
-        >
-          <Menu size={24} />
-        </button>
-        <h1 className="ml-4 text-xl font-semibold">
-          <Link to="/" className="text-white">
-            MedCalc
-          </Link>
-        </h1>
+      <header className="sticky top-0 z-40 border-b border-gray-200 bg-white">
+        <div className="flex items-center px-4 py-4 md:py-5">
+          <button
+            onClick={() => setIsOpen(true)}
+            className="p-2 text-gray-700 hover:bg-gray-100 rounded-lg transition-colors md:hidden"
+            aria-label="Open menu"
+          >
+            <Menu size={24} />
+          </button>
+          <h1 className="ml-3 md:ml-0 text-2xl font-bold text-gray-900">
+            <Link to="/" className="text-gray-900 hover:text-gray-700 transition-colors">
+              MedCalc
+            </Link>
+          </h1>
+
+          {/* Desktop navigation */}
+          <nav className="hidden md:flex ml-8 gap-1">
+            {NAV_ITEMS.map(({ to, icon: Icon, label }) => (
+              <Link
+                key={to}
+                to={to}
+                className="flex items-center gap-2 px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-lg transition-colors"
+                activeProps={{ className: 'flex items-center gap-2 px-4 py-2 text-gray-900 bg-gray-100 font-medium rounded-lg transition-colors' }}
+              >
+                <Icon size={18} />
+                <span>{label}</span>
+              </Link>
+            ))}
+          </nav>
+        </div>
       </header>
 
+      {/* Mobile sidebar */}
       <aside
-        className={`fixed top-0 left-0 h-full w-80 bg-gray-900 text-white shadow-2xl z-50 transform transition-transform duration-300 ease-in-out flex flex-col ${
+        className={`fixed top-0 left-0 h-full w-80 bg-white border-r border-gray-200 shadow-lg z-50 transform transition-transform duration-300 ease-in-out flex flex-col ${
           isOpen ? 'translate-x-0' : '-translate-x-full'
         }`}
       >
-        <div className="flex items-center justify-between p-4 border-b border-gray-700">
-          <h2 className="text-xl font-bold">Navigation</h2>
+        <div className="flex items-center justify-between p-4 border-b border-gray-200">
+          <h2 className="text-xl font-bold text-gray-900">Navigation</h2>
           <button
             onClick={closeMenu}
-            className="p-2 hover:bg-gray-800 rounded-lg transition-colors"
+            className="p-2 text-gray-700 hover:bg-gray-100 rounded-lg transition-colors"
             aria-label="Close menu"
           >
             <X size={24} />
@@ -72,6 +90,15 @@ export default function Header() {
           ))}
         </nav>
       </aside>
+
+      {/* Mobile overlay */}
+      {isOpen && (
+        <div
+          className="fixed inset-0 z-40 bg-black bg-opacity-50 md:hidden"
+          onClick={closeMenu}
+          aria-hidden="true"
+        />
+      )}
     </>
   )
 }

@@ -10,7 +10,7 @@ interface DateCalculatorProps {
   calculateDay: (startDate: Date, targetDate: Date) => number | null
 }
 
-const DATE_INPUT_CLASS = 'w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-transparent outline-none transition-all'
+const DATE_INPUT_CLASS = 'w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-400 focus:border-transparent outline-none transition-all'
 const QUICK_SET_BUTTON_CLASS = 'flex-1 px-4 py-2 bg-gray-200 hover:bg-gray-300 text-gray-900 font-medium rounded-lg transition-colors'
 
 function formatDateForInput(date: Date): string {
@@ -92,13 +92,13 @@ export default function DateCalculator({
   }
 
   return (
-    <div className="space-y-6">
+    <div className="w-full max-w-2xl mx-auto px-6 py-8 md:py-12 space-y-8">
       <div>
-        <h2 className="text-3xl font-bold text-gray-900 mb-2">{title}</h2>
-        <p className="text-lg text-gray-600">{description}</p>
+        <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-3">{title}</h2>
+        <p className="text-lg md:text-xl text-gray-600 leading-relaxed">{description}</p>
       </div>
 
-      <div className="space-y-4">
+      <div className="space-y-6">
         <div>
           <label htmlFor={`${id}-start-date`} className="block text-sm font-medium text-gray-700 mb-2">
             {startDateLabel}
@@ -151,9 +151,9 @@ export default function DateCalculator({
       )}
 
       {result !== null && !resultError && (
-        <div className="p-8 bg-gradient-to-br from-cyan-50 to-blue-50 border-2 border-cyan-200 rounded-lg">
-          <p className="text-sm font-medium text-gray-600 mb-2">{resultLabel}</p>
-          <p className="text-6xl font-bold text-cyan-600">
+        <div className="p-8 bg-gray-50 border-2 border-gray-300 rounded-lg">
+          <p className="text-sm font-medium text-gray-600 mb-3">{resultLabel}</p>
+          <p className="text-6xl md:text-7xl font-bold text-gray-900">
             {result}
           </p>
           <p className="text-sm text-gray-500 mt-2">

@@ -105,33 +105,33 @@ function LinkCard({ title, url, description }: Link) {
       href={url}
       target="_blank"
       rel="noopener noreferrer"
-      className="p-6 border border-gray-200 rounded-lg hover:border-cyan-400 hover:shadow-md focus:ring-2 focus:ring-cyan-500 focus:ring-offset-2 transition-all bg-white outline-none"
+      className="p-6 border border-gray-200 rounded-lg hover:border-gray-400 hover:shadow-md focus:ring-2 focus:ring-gray-400 focus:ring-offset-2 transition-all bg-white outline-none"
       aria-label={`${title} (opens in new window)`}
     >
-      <h3 className="text-lg font-semibold text-gray-900 mb-2 hover:text-cyan-600 transition-colors">
+      <h3 className="text-lg font-semibold text-gray-900 mb-2 hover:text-gray-700 transition-colors">
         {title}
         <span className="ml-2 text-gray-400 text-sm" aria-hidden="true">↗</span>
       </h3>
-      <p className="text-gray-600 text-sm">{description}</p>
+      <p className="text-gray-600 text-sm leading-relaxed">{description}</p>
     </a>
   )
 }
 
 function LinksPage() {
   return (
-    <div className="min-h-screen bg-white p-6">
+    <div className="min-h-screen bg-white px-6 py-8 md:py-12">
       <div className="max-w-4xl mx-auto">
-        <h1 className="text-4xl font-bold text-gray-900 mb-4">
+        <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
           Helpful Resources
         </h1>
-        <p className="text-lg text-gray-600 mb-12">
+        <p className="text-lg md:text-xl text-gray-600 mb-12 md:mb-16 leading-relaxed">
           A collection of useful links and resources for transplant, chemotherapy, and medical information.
         </p>
-        <div className="space-y-12">
+        <div className="space-y-14 md:space-y-16">
           {LINK_CATEGORIES.map((category) => (
             <div key={category.name}>
-              <h2 className="text-2xl font-bold text-gray-900 mb-6">{category.name}</h2>
-              <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+              <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-6 md:mb-8">{category.name}</h2>
+              <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
                 {category.links.map((link) => (
                   <LinkCard key={link.url} {...link} />
                 ))}
