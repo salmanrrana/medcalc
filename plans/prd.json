@@ -1,7 +1,297 @@
 {
   "projectName": "MedCalc",
   "projectPath": "/home/xtra/code/personal_projects/medcalc",
-  "userStories": [],
-  "generatedAt": "2026-02-15T00:00:00Z",
-  "description": "Medical date calculators for transplant and chemotherapy tracking"
+  "testingRequirements": [
+    "Tests must validate user-facing behavior, not implementation details",
+    "Focus on what users actually do - integration tests over unit tests",
+    "Don't mock excessively - test real behavior where possible",
+    "Coverage metrics are meaningless - user flow coverage is everything"
+  ],
+  "userStories": [
+    {
+      "id": "215b9124-cd24-4acf-a335-accc01ba552a",
+      "title": "Phase 1: Initialize TanStack Start project",
+      "passes": false,
+      "overview": "",
+      "types": [],
+      "designDecisions": [],
+      "implementationGuide": [],
+      "acceptanceCriteria": [
+        "Implement as described",
+        "Verify functionality works as expected"
+      ],
+      "references": [],
+      "description": "Set up a new TanStack Start project with all necessary configurations.\\n\\n## Acceptance Criteria\\n- [x] TanStack Start project initialized\\n- [x] Node modules installed\\n- [x] Dev server runs without errors\\n- [x] Basic package.json configured\\n- [x] .gitignore properly set up\\n\\n## Steps\\n1. Initialize TanStack Start: `npm create @tanstack/start@latest`\\n2. Install dependencies\\n3. Verify dev server runs: `npm run dev`\\n4. Commit initial setup",
+      "priority": "high",
+      "tags": [
+        "setup",
+        "phase1",
+        "infrastructure"
+      ]
+    },
+    {
+      "id": "d12252fb-35df-46e7-8468-0e491b97e504",
+      "title": "Phase 1: Set up Tailwind CSS",
+      "passes": false,
+      "overview": "",
+      "types": [],
+      "designDecisions": [],
+      "implementationGuide": [],
+      "acceptanceCriteria": [
+        "Implement as described",
+        "Verify functionality works as expected"
+      ],
+      "references": [],
+      "description": "Configure Tailwind CSS for clean, minimal styling.\\n\\n## Acceptance Criteria\\n- [x] Tailwind CSS installed and configured\\n- [x] tailwind.config.ts created with custom config\\n- [x] Global styles imported in main layout\\n- [x] Utility classes work in components\\n\\n## Steps\\n1. Install Tailwind: `npm install -D tailwindcss postcss autoprefixer`\\n2. Initialize Tailwind config\\n3. Configure for minimal aesthetic (neutral colors, clean spacing)\\n4. Create global.css with base styles\\n5. Test in a simple component",
+      "priority": "high",
+      "tags": [
+        "styling",
+        "phase1",
+        "infrastructure"
+      ]
+    },
+    {
+      "id": "0385aa2b-279a-40b5-8c4b-41a99a1e330e",
+      "title": "Phase 1: Create TanStack Router structure",
+      "passes": false,
+      "overview": "",
+      "types": [],
+      "designDecisions": [],
+      "implementationGuide": [],
+      "acceptanceCriteria": [
+        "Implement as described",
+        "Verify functionality works as expected"
+      ],
+      "references": [],
+      "description": "Set up routing structure for calculator pages and links page.\\n\\n## Acceptance Criteria\\n- [x] TanStack Router configured\\n- [x] Root layout component created\\n- [x] Route structure: home, transplant, chemo, links\\n- [x] Navigation component skeleton\\n- [x] Routes navigate without errors\\n\\n## Routes to Create\\n- `/` - Home/dashboard\\n- `/transplant` - Transplant calculator\\n- `/chemo` - Chemotherapy calculator\\n- `/links` - Links page\\n\\n## Steps\\n1. Create route directory structure in src/routes/\\n2. Create __root.tsx for layout\\n3. Create index.tsx for home\\n4. Create transplant.tsx, chemo.tsx, links.tsx\\n5. Implement basic Navigation component\\n6. Test routing between pages",
+      "priority": "high",
+      "tags": [
+        "routing",
+        "phase1",
+        "infrastructure"
+      ]
+    },
+    {
+      "id": "89bb58a4-d070-4226-afb3-eaeb02e4588a",
+      "title": "Phase 2: Implement transplant calculator logic",
+      "passes": false,
+      "overview": "",
+      "types": [],
+      "designDecisions": [],
+      "implementationGuide": [],
+      "acceptanceCriteria": [
+        "Implement as described",
+        "Verify functionality works as expected"
+      ],
+      "references": [],
+      "description": "Build the transplant day calculation engine.\\n\\n## Acceptance Criteria\\n- [x] Date calculation function works correctly\\n- [x] Handles edge cases (same day, past dates, future dates)\\n- [x] Returns correct day number (day 0 = transplant, day 1 = next day)\\n- [x] Unit tests pass for all scenarios\\n\\n## Logic\\nGiven:\\n- Transplant date: T\\n- Current/target date: C\\n\\nCalculation:\\n- Days = C - T (using date-fns)\\n- Day number = Days + 1 (so transplant day = day 1, not day 0)\\n\\nWait, clarify: User said \\\"transplant day is considered day 0\\\" and \\\"day after transplant day is day 1\\\"\\nSo: Days = C - T directly (no +1)\\n\\n## Steps\\n1. Install date-fns: `npm install date-fns`\\n2. Create utils/dateCalculations.ts\\n3. Write transplantDaysSince() function\\n4. Test with various date combinations\\n5. Add validation for invalid dates\\n6. Write unit tests",
+      "priority": "high",
+      "tags": [
+        "calculator",
+        "phase2",
+        "core-feature"
+      ]
+    },
+    {
+      "id": "ff8249c9-4323-4b70-870d-1099aebf02a9",
+      "title": "Phase 2: Implement chemotherapy calculator logic",
+      "passes": false,
+      "overview": "",
+      "types": [],
+      "designDecisions": [],
+      "implementationGuide": [],
+      "acceptanceCriteria": [
+        "Implement as described",
+        "Verify functionality works as expected"
+      ],
+      "references": [],
+      "description": "Build the chemotherapy cycle day calculation engine.\\n\\n## Acceptance Criteria\\n- [x] Date calculation function works correctly\\n- [x] Handles edge cases (same day, past dates, future dates)\\n- [x] Returns correct day number (day 1 = first chemo, day 2 = second, etc.)\\n- [x] Unit tests pass for all scenarios\\n\\n## Logic\\nGiven:\\n- First chemo date: C1\\n- Current/target date: C\\n\\nCalculation:\\n- Days = C - C1 (using date-fns)\\n- Day number = Days + 1 (so first chemo = day 1)\\n\\n## Steps\\n1. Create chemoDaysSince() function in utils/dateCalculations.ts\\n2. Test with various date combinations\\n3. Add validation for invalid dates\\n4. Write unit tests\\n5. Ensure consistency with transplant calculator pattern",
+      "priority": "high",
+      "tags": [
+        "calculator",
+        "phase2",
+        "core-feature"
+      ]
+    },
+    {
+      "id": "2a6fb294-552c-44ec-a5bc-0b69e3dccf59",
+      "title": "Phase 2: Build DateCalculator component",
+      "passes": false,
+      "overview": "",
+      "types": [],
+      "designDecisions": [],
+      "implementationGuide": [],
+      "acceptanceCriteria": [
+        "Implement as described",
+        "Verify functionality works as expected"
+      ],
+      "references": [],
+      "description": "Create reusable date calculator component.\\n\\n## Acceptance Criteria\\n- [x] Component accepts title, description, calculation function\\n- [x] Two date input fields (start date, target date)\\n- [x] Target date defaults to today\\n- [x] Large result display showing calculated day\\n- [x] Input validation and error messages\\n- [x] Mobile-responsive layout\\n\\n## Component Props\\n```typescript\\ninterface DateCalculatorProps {\\n  title: string;\\n  description: string;\\n  startDateLabel: string;\\n  targetDateLabel: string;\\n  resultLabel: string;\\n  calculateDay: (startDate: Date, targetDate: Date) => number;\\n}\\n```\\n\\n## Features\\n- Date pickers with fallback to text input\\n- Preset buttons: \\\"Today\\\", \\\"Tomorrow\\\"\\n- Result box with clear typography\\n- Error handling for invalid dates\\n- Accessibility: labels, ARIA, keyboard nav\\n\\n## Steps\\n1. Create src/components/DateCalculator.tsx\\n2. Implement date input UI\\n3. Integrate calculation function\\n4. Add error handling\\n5. Test on mobile devices\"",
+      "priority": "high",
+      "tags": [
+        "component",
+        "phase2",
+        "core-feature"
+      ]
+    },
+    {
+      "id": "8c1202fa-23e7-4d6e-80a7-a6d1cad4a504",
+      "title": "Phase 2: Create calculator pages (transplant & chemo)",
+      "passes": false,
+      "overview": "",
+      "types": [],
+      "designDecisions": [],
+      "implementationGuide": [],
+      "acceptanceCriteria": [
+        "Implement as described",
+        "Verify functionality works as expected"
+      ],
+      "references": [],
+      "description": "Implement the transplant and chemo calculator pages using the DateCalculator component.\\n\\n## Acceptance Criteria\\n- [x] /transplant route renders transplant calculator\\n- [x] /chemo route renders chemo calculator\\n- [x] Both pages use DateCalculator component\\n- [x] Both pages have correct titles and descriptions\\n- [x] Calculations work correctly on both pages\\n- [x] Mobile-responsive\\n\\n## Transplant Page\\n- Title: \\\"Transplant Day Calculator\\\"\\n- Start label: \\\"Transplant Date\\\"\\n- Target label: \\\"Target Date (defaults to today)\\\"\\n- Result label: \\\"Days Since Transplant\\\"\\n\\n## Chemo Page\\n- Title: \\\"Chemotherapy Day Calculator\\\"\\n- Start label: \\\"First Chemo Date\\\"\\n- Target label: \\\"Target Date (defaults to today)\\\"\\n- Result label: \\\"Current Chemo Day\\\"\\n\\n## Steps\\n1. Create src/routes/transplant.tsx\\n2. Create src/routes/chemo.tsx\\n3. Import and use DateCalculator component\\n4. Pass correct calculation functions\\n5. Test both routes\"",
+      "priority": "high",
+      "tags": [
+        "calculator",
+        "phase2",
+        "core-feature"
+      ]
+    },
+    {
+      "id": "bdde28e4-1e72-475e-a82d-fbe7c63bace0",
+      "title": "Phase 3: Build Links page component",
+      "passes": false,
+      "overview": "",
+      "types": [],
+      "designDecisions": [],
+      "implementationGuide": [],
+      "acceptanceCriteria": [
+        "Implement as described",
+        "Verify functionality works as expected"
+      ],
+      "references": [],
+      "description": "Create the helpful links page with reference resources.\\n\\n## Acceptance Criteria\\n- [x] Links page displays organized list of resources\\n- [x] Each link has title, URL, and brief description\\n- [x] Links are grouped by category (optional)\\n- [x] Links open in new tab\\n- [x] Mobile-responsive layout\\n- [x] Clean, minimal design\\n\\n## Initial Link Categories\\n1. **Transplant Resources**\\n   - Add helpful transplant-related links\\n\\n2. **Chemotherapy Resources**\\n   - Add helpful chemo-related links\\n\\n3. **General Medical**\\n   - Add general medical reference links\\n\\n## Future Enhancement\\n- Allow users to add/edit links via localStorage\\n\\n## Steps\\n1. Create src/components/LinksSection.tsx\\n2. Create src/routes/links.tsx\\n3. Define initial links (user to provide URLs)\\n4. Implement category grouping\\n5. Style for clean minimal appearance\\n6. Test responsiveness\"",
+      "priority": "medium",
+      "tags": [
+        "links",
+        "phase3",
+        "core-feature"
+      ]
+    },
+    {
+      "id": "c5751c52-0f74-4f67-957b-65df19988bdd",
+      "title": "Phase 3: Polish styling and responsive design",
+      "passes": false,
+      "overview": "",
+      "types": [],
+      "designDecisions": [],
+      "implementationGuide": [],
+      "acceptanceCriteria": [
+        "Implement as described",
+        "Verify functionality works as expected"
+      ],
+      "references": [],
+      "description": "Refine all styling to achieve clean, minimal aesthetic with excellent responsive design.\\n\\n## Acceptance Criteria\\n- [x] All pages follow minimal design aesthetic\\n- [x] Consistent typography and spacing\\n- [x] Color palette is neutral with subtle accent\\n- [x] Responsive design tested on multiple screen sizes\\n- [x] Mobile layout is excellent (not just functional)\\n- [x] Whitespace is generous and intentional\\n- [x] All interactive elements have clear hover states\\n\\n## Design Guidelines to Implement\\n- Neutral color palette (whites, grays, subtle accent)\\n- Large readable typography\\n- Generous spacing and padding\\n- Clear visual hierarchy\\n- Subtle shadows and borders\\n- Consistent button styling\\n- Clean form inputs\\n\\n## Testing Breakpoints\\n- Mobile: 375px, 768px\\n- Tablet: 1024px\\n- Desktop: 1440px\\n\\n## Steps\\n1. Review all pages with design guidelines\\n2. Update color scheme in tailwind.config.ts\\n3. Refine component styling\\n4. Test on various devices/sizes\\n5. Make final adjustments\"",
+      "priority": "high",
+      "tags": [
+        "design",
+        "phase3",
+        "polish"
+      ]
+    },
+    {
+      "id": "5d82870c-3f83-4004-b9c8-e83ce151f193",
+      "title": "Phase 4: Mobile device testing",
+      "passes": false,
+      "overview": "",
+      "types": [],
+      "designDecisions": [],
+      "implementationGuide": [],
+      "acceptanceCriteria": [
+        "Implement as described",
+        "Verify functionality works as expected"
+      ],
+      "references": [],
+      "description": "Comprehensive testing on actual mobile devices to ensure excellent UX.\\n\\n## Acceptance Criteria\\n- [x] Tested on iOS Safari (iPhone)\\n- [x] Tested on Chrome Mobile (Android)\\n- [x] All calculators work correctly on mobile\\n- [x] Links page displays properly\\n- [x] No layout issues or cutoffs\\n- [x] Touch interactions work smoothly\\n- [x] Date pickers function correctly\\n\\n## Testing Checklist\\n- [ ] iPhone 12 Mini (5.4\\\") - iOS Safari\\n- [ ] iPhone 14 Pro (6.1\\\") - iOS Safari\\n- [ ] Android phone (5.5\\\") - Chrome\\n- [ ] Android phone (6.5\\\") - Chrome\\n- [ ] iPad (10\\\") - Safari\\n- [ ] Test in portrait and landscape\\n- [ ] Test with system text size scaling\\n- [ ] Test with dark mode (if implemented)\\n\\n## Issues to Look For\\n- Text overflow or cutoff\\n- Input field sizing\\n- Button tap targets (minimum 44x44px)\\n- Navigation accessibility\\n- Keyboard appearance\\n- Loading states\\n\\n## Steps\\n1. Test on available devices\\n2. Document any issues\\n3. Fix critical issues\\n4. Retest after fixes\"",
+      "priority": "high",
+      "tags": [
+        "testing",
+        "phase4",
+        "quality"
+      ]
+    },
+    {
+      "id": "c2cbf7cd-7a9f-4a8a-9031-a2bbb79328b8",
+      "title": "Phase 4: Accessibility audit",
+      "passes": false,
+      "overview": "",
+      "types": [],
+      "designDecisions": [],
+      "implementationGuide": [],
+      "acceptanceCriteria": [
+        "Implement as described",
+        "Verify functionality works as expected"
+      ],
+      "references": [],
+      "description": "Ensure the app meets WCAG AA accessibility standards.\\n\\n## Acceptance Criteria\\n- [x] All text has sufficient color contrast (≥ 4.5:1)\\n- [x] All interactive elements are keyboard accessible\\n- [x] Form inputs have associated labels\\n- [x] Page structure uses semantic HTML\\n- [x] No keyboard traps\\n- [x] Focus indicators are visible\\n- [x] Date pickers are accessible\\n- [x] All images/icons have alt text or aria labels\\n\\n## Testing Tools\\n- Use browser accessibility inspector\\n- Manual keyboard navigation test\\n- Chrome DevTools Lighthouse audit\\n- axe DevTools extension\\n- Screen reader testing (if possible)\\n\\n## Steps\\n1. Run automated accessibility audit (Lighthouse)\\n2. Test keyboard navigation on all pages\\n3. Check color contrast\\n4. Verify semantic HTML\\n5. Test with screen reader\\n6. Fix any identified issues\\n7. Retest to confirm fixes\"",
+      "priority": "high",
+      "tags": [
+        "testing",
+        "phase4",
+        "accessibility"
+      ]
+    },
+    {
+      "id": "05f050c4-bdc4-41e1-8073-3ff6dd91a875",
+      "title": "Phase 4: Performance optimization",
+      "passes": false,
+      "overview": "",
+      "types": [],
+      "designDecisions": [],
+      "implementationGuide": [],
+      "acceptanceCriteria": [
+        "Implement as described",
+        "Verify functionality works as expected"
+      ],
+      "references": [],
+      "description": "Optimize bundle size, load time, and runtime performance.\\n\\n## Acceptance Criteria\\n- [x] Page load time < 2 seconds\\n- [x] Lighthouse Performance score > 80\\n- [x] Bundle size is minimal\\n- [x] Calculator calculations are instant\\n- [x] No layout shifts\\n- [x] Images are optimized\\n- [x] CSS is minified and efficient\\n\\n## Optimization Areas\\n- Code splitting\\n- Bundle analysis (use Vite analyzer)\\n- Tree shaking unused code\\n- CSS optimization\\n- Image optimization\\n- Font loading strategy\\n\\n## Metrics to Measure\\n- Page load time\\n- Largest Contentful Paint (LCP)\\n- Cumulative Layout Shift (CLS)\\n- Interaction to Next Paint (INP)\\n- Total bundle size\\n\\n## Steps\\n1. Run Lighthouse audit\\n2. Analyze bundle with vite-plugin-visualizer\\n3. Identify largest dependencies\\n4. Remove unnecessary code/dependencies\\n5. Optimize images and fonts\\n6. Minify and compress assets\\n7. Retest metrics\"",
+      "priority": "medium",
+      "tags": [
+        "testing",
+        "phase4",
+        "performance"
+      ]
+    },
+    {
+      "id": "0140540d-1277-4743-9b06-c8205eca7a9f",
+      "title": "Phase 4: Deploy to static host",
+      "passes": false,
+      "overview": "",
+      "types": [],
+      "designDecisions": [],
+      "implementationGuide": [],
+      "acceptanceCriteria": [
+        "Implement as described",
+        "Verify functionality works as expected"
+      ],
+      "references": [],
+      "description": "Build and deploy the app to free static hosting (Surge, Netlify, or GitHub Pages).\\n\\n## Acceptance Criteria\\n- [x] Production build successful\\n- [x] App deployed and accessible via URL\\n- [x] All features work on live deployment\\n- [x] HTTPS enforced\\n- [x] No console errors in browser\\n- [x] All routes work correctly\\n\\n## Deployment Options\\n1. **Surge.sh** - Simple, free, CLI-based\\n   - `npm install -g surge`\\n   - `surge` (from dist directory)\\n\\n2. **Netlify** - Free tier with CI/CD\\n   - Connect GitHub repo\\n   - Auto-deploy on push\\n   - https://app.netlify.com\\n\\n3. **GitHub Pages** - Free with GitHub repo\\n   - Configure build action\\n   - Deploy from gh-pages branch\\n\\n## Deployment Checklist\\n- [ ] Build app: `npm run build`\\n- [ ] Test build locally: `npm run preview`\\n- [ ] Choose hosting platform\\n- [ ] Set up domain (optional)\\n- [ ] Deploy\\n- [ ] Test all features on live site\\n- [ ] Monitor for errors\\n\\n## Steps\\n1. Create optimized production build\\n2. Test build locally\\n3. Choose deployment platform\\n4. Follow platform setup instructions\\n5. Deploy\\n6. Verify all features work\\n7. Set up custom domain (optional)\"",
+      "priority": "high",
+      "tags": [
+        "deployment",
+        "phase4",
+        "release"
+      ]
+    }
+  ],
+  "projectContext": {
+    "techStack": [],
+    "dosDonts": [],
+    "verificationSteps": [
+      "Run `pnpm type-check` - must pass with no errors",
+      "Run `pnpm lint` - must pass with no errors",
+      "Run `pnpm test` - all tests must pass"
+    ]
+  },
+  "generatedAt": "2026-02-15T14:20:05.348Z",
+  "epicTitle": "MVP: MedCalc Medical Date Calculators",
+  "epicDescription": "Build a clean, minimal web app with transplant and chemotherapy date calculators plus a links page. One-week timeline with focus on quality."
 }
