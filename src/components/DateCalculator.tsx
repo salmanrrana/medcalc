@@ -1,5 +1,5 @@
 import { useId, useState } from 'react'
-import { parseISO, isValid } from 'date-fns'
+import { parseISO, isValid, format, addDays } from 'date-fns'
 
 interface DateCalculatorProps {
   title: string
@@ -14,10 +14,13 @@ const DATE_INPUT_CLASS = 'w-full px-4 py-3 border border-gray-300 rounded-lg foc
 const QUICK_SET_BUTTON_CLASS = 'flex-1 px-4 py-2 bg-gray-200 hover:bg-gray-300 text-gray-900 font-medium rounded-lg transition-colors'
 
 function formatDateForInput(date: Date): string {
-  const year = date.getFullYear()
-  const month = String(date.getMonth() + 1).padStart(2, '0')
-  const day = String(date.getDate()).padStart(2, '0')
-  return `${year}-${month}-${day}`
+  if (!(date instanceof Date)) {
+    throw new TypeError('formatDateForInput expects a Date object')
+  }
+  if (!isValid(date)) {
+    throw new Error('formatDateForInput expects a valid Date')
+  }
+  return format(date, 'yyyy-MM-dd')
 }
 
 function parseDate(dateString: string): Date | null {
@@ -25,7 +28,16 @@ function parseDate(dateString: string): Date | null {
   try {
     const date = parseISO(dateString)
     return isValid(date) ? date : null
-  } catch {
+  } catch (error) {
+    if (error instanceof RangeError || error instanceof TypeError) {
+      // Expected parsing errors from invalid input
+      return null
+    }
+    // Log unexpected errors for debugging
+    console.error('Unexpected error parsing date:', {
+      input: dateString,
+      error: error instanceof Error ? error.message : String(error),
+    })
     return null
   }
 }
@@ -62,13 +74,21 @@ export default function DateCalculator({
   }
 
   const handleSetToday = () => {
-    setTargetDateInput(formatDateForInput(new Date()))
+    try {
+      const today = new Date()
+      setTargetDateInput(formatDateForInput(today))
+    } catch (error) {
+      console.error('Failed to set date to today:', error)
+    }
   }
 
   const handleSetTomorrow = () => {
-    const tomorrow = new Date()
-    tomorrow.setDate(tomorrow.getDate() + 1)
-    setTargetDateInput(formatDateForInput(tomorrow))
+    try {
+      const tomorrow = addDays(new Date(), 1)
+      setTargetDateInput(formatDateForInput(tomorrow))
+    } catch (error) {
+      console.error('Failed to set date to tomorrow:', error)
+    }
   }
 
   return (
@@ -87,9 +107,7 @@ export default function DateCalculator({
             id={`${id}-start-date`}
             type="date"
             value={startDateInput}
-            onChange={(e) => {
-              setStartDateInput(e.target.value)
-            }}
+            onChange={(e) => setStartDateInput(e.target.value)}
             className={DATE_INPUT_CLASS}
           />
         </div>
@@ -103,9 +121,7 @@ export default function DateCalculator({
               id={`${id}-target-date`}
               type="date"
               value={targetDateInput}
-              onChange={(e) => {
-                setTargetDateInput(e.target.value)
-              }}
+              onChange={(e) => setTargetDateInput(e.target.value)}
               className={DATE_INPUT_CLASS}
             />
             <div className="flex gap-2">

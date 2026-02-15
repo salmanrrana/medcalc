@@ -137,7 +137,7 @@
     {
       "id": "35765699-309a-4920-9b59-ff3cd5bb5b24",
       "title": "Phase 2: Create calculator pages (transplant & chemo)",
-      "passes": false,
+      "passes": true,
       "overview": "",
       "types": [],
       "designDecisions": [],

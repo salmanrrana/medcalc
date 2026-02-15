@@ -8,13 +8,19 @@ import Header from '../components/Header'
 
 import appCss from '../styles.css?url'
 
+interface AppErrorBoundaryState {
+  hasError: boolean
+  error: Error | null
+  errorId: string | null
+}
+
 class AppErrorBoundary extends Component<
   { children: ReactNode },
-  { hasError: boolean; error: Error | null }
+  AppErrorBoundaryState
 > {
   constructor(props: { children: ReactNode }) {
     super(props)
-    this.state = { hasError: false, error: null }
+    this.state = { hasError: false, error: null, errorId: null }
   }
 
   static getDerivedStateFromError(error: Error) {
@@ -22,7 +28,27 @@ class AppErrorBoundary extends Component<
   }
 
   componentDidCatch(error: Error, errorInfo: ErrorInfo) {
-    console.error('Application Error:', error, errorInfo)
+    // Generate unique error ID for user reference
+    const errorId = crypto.randomUUID()
+
+    // Log error with full context
+    const errorPayload = {
+      id: errorId,
+      message: error.message,
+      stack: error.stack,
+      componentStack: errorInfo.componentStack,
+      timestamp: new Date().toISOString(),
+      userAgent: navigator.userAgent,
+      url: window.location.href,
+    }
+
+    console.error('Application Error:', errorPayload)
+
+    // In production, this would send to error tracking service
+    // await fetch('/api/errors', { method: 'POST', body: JSON.stringify(errorPayload) })
+
+    // Store errorId in state so it can be displayed to user
+    this.setState({ errorId })
   }
 
   render() {
@@ -51,6 +77,11 @@ class AppErrorBoundary extends Component<
                 <p className="error-text">
                   The application encountered an unexpected error. Please refresh the page to try again.
                 </p>
+                {this.state.errorId && (
+                  <p style={{ fontSize: '14px', color: 'rgb(107, 114, 128)', marginBottom: '16px' }}>
+                    Error ID: <code style={{ fontFamily: 'monospace', backgroundColor: 'rgb(243, 244, 246)', padding: '2px 4px', borderRadius: '4px' }}>{this.state.errorId}</code>
+                  </p>
+                )}
                 <button className="error-button" onClick={() => window.location.reload()}>
                   Refresh Page
                 </button>
@@ -95,7 +126,7 @@ export const Route = createRootRoute({
   shellComponent: RootDocument,
 })
 
-function RootDocument({ children }: { children: React.ReactNode }) {
+function RootDocument({ children }: { children: ReactNode }) {
   return (
     <html lang="en">
       <head>
