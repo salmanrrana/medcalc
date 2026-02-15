@@ -1,6 +1,5 @@
-'use client'
-
-import { useState } from 'react'
+import { useId, useState } from 'react'
+import { parseISO, isValid } from 'date-fns'
 
 interface DateCalculatorProps {
   title: string
@@ -11,6 +10,9 @@ interface DateCalculatorProps {
   calculateDay: (startDate: Date, targetDate: Date) => number | null
 }
 
+const DATE_INPUT_CLASS = 'w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-transparent outline-none transition-all'
+const QUICK_SET_BUTTON_CLASS = 'flex-1 px-4 py-2 bg-gray-200 hover:bg-gray-300 text-gray-900 font-medium rounded-lg transition-colors'
+
 function formatDateForInput(date: Date): string {
   const year = date.getFullYear()
   const month = String(date.getMonth() + 1).padStart(2, '0')
@@ -20,8 +22,12 @@ function formatDateForInput(date: Date): string {
 
 function parseDate(dateString: string): Date | null {
   if (!dateString) return null
-  const date = new Date(dateString)
-  return isNaN(date.getTime()) ? null : date
+  try {
+    const date = parseISO(dateString)
+    return isValid(date) ? date : null
+  } catch {
+    return null
+  }
 }
 
 export default function DateCalculator({
@@ -32,29 +38,35 @@ export default function DateCalculator({
   resultLabel,
   calculateDay,
 }: DateCalculatorProps) {
-  const today = new Date()
+  const id = useId()
   const [startDateInput, setStartDateInput] = useState('')
-  const [targetDateInput, setTargetDateInput] = useState(formatDateForInput(today))
-  const [error, setError] = useState<string | null>(null)
+  const [targetDateInput, setTargetDateInput] = useState(() => formatDateForInput(new Date()))
 
   const startDate = parseDate(startDateInput)
   const targetDate = parseDate(targetDateInput)
-  let result: number | null = null
+
   let resultError: string | null = null
 
-  if (startDate && targetDate) {
+  if (startDateInput && !startDate) {
+    resultError = 'Start date is invalid. Please use the date picker or enter a valid date in YYYY-MM-DD format.'
+  } else if (targetDateInput && !targetDate) {
+    resultError = 'Target date is invalid. Please use the date picker or enter a valid date in YYYY-MM-DD format.'
+  }
+
+  let result: number | null = null
+  if (!resultError && startDate && targetDate) {
     result = calculateDay(startDate, targetDate)
     if (result === null) {
-      resultError = 'Invalid dates provided. Please check your input.'
+      resultError = 'Unable to calculate days. Both dates must be valid. Please verify your entries.'
     }
   }
 
   const handleSetToday = () => {
-    setTargetDateInput(formatDateForInput(today))
+    setTargetDateInput(formatDateForInput(new Date()))
   }
 
   const handleSetTomorrow = () => {
-    const tomorrow = new Date(today)
+    const tomorrow = new Date()
     tomorrow.setDate(tomorrow.getDate() + 1)
     setTargetDateInput(formatDateForInput(tomorrow))
   }
@@ -68,49 +80,45 @@ export default function DateCalculator({
 
       <div className="space-y-4">
         <div>
-          <label htmlFor="start-date" className="block text-sm font-medium text-gray-700 mb-2">
+          <label htmlFor={`${id}-start-date`} className="block text-sm font-medium text-gray-700 mb-2">
             {startDateLabel}
           </label>
           <input
-            id="start-date"
+            id={`${id}-start-date`}
             type="date"
             value={startDateInput}
             onChange={(e) => {
               setStartDateInput(e.target.value)
-              setError(null)
             }}
-            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-transparent outline-none transition-all"
-            aria-label={startDateLabel}
+            className={DATE_INPUT_CLASS}
           />
         </div>
 
         <div>
-          <label htmlFor="target-date" className="block text-sm font-medium text-gray-700 mb-2">
+          <label htmlFor={`${id}-target-date`} className="block text-sm font-medium text-gray-700 mb-2">
             {targetDateLabel}
           </label>
           <div className="space-y-2">
             <input
-              id="target-date"
+              id={`${id}-target-date`}
               type="date"
               value={targetDateInput}
               onChange={(e) => {
                 setTargetDateInput(e.target.value)
-                setError(null)
               }}
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-transparent outline-none transition-all"
-              aria-label={targetDateLabel}
+              className={DATE_INPUT_CLASS}
             />
             <div className="flex gap-2">
               <button
                 onClick={handleSetToday}
-                className="flex-1 px-4 py-2 bg-gray-200 hover:bg-gray-300 text-gray-900 font-medium rounded-lg transition-colors"
+                className={QUICK_SET_BUTTON_CLASS}
                 aria-label="Set target date to today"
               >
                 Today
               </button>
               <button
                 onClick={handleSetTomorrow}
-                className="flex-1 px-4 py-2 bg-gray-200 hover:bg-gray-300 text-gray-900 font-medium rounded-lg transition-colors"
+                className={QUICK_SET_BUTTON_CLASS}
                 aria-label="Set target date to tomorrow"
               >
                 Tomorrow
@@ -119,12 +127,6 @@ export default function DateCalculator({
           </div>
         </div>
       </div>
-
-      {error && (
-        <div className="p-4 bg-red-50 border border-red-200 rounded-lg" role="alert">
-          <p className="text-red-800 font-medium">{error}</p>
-        </div>
-      )}
 
       {resultError && (
         <div className="p-4 bg-red-50 border border-red-200 rounded-lg" role="alert">
