@@ -1,45 +1,34 @@
-import { defineConfig } from 'vite'
 import { devtools } from '@tanstack/devtools-vite'
 import { tanstackStart } from '@tanstack/react-start/plugin/vite'
-import viteReact from '@vitejs/plugin-react'
-import viteTsConfigPaths from 'vite-tsconfig-paths'
-import { fileURLToPath, URL } from 'node:url'
 import tailwindcss from '@tailwindcss/vite'
+import viteReact from '@vitejs/plugin-react'
 import { nitro } from 'nitro/vite'
+import { defineConfig } from 'vite'
+import viteTsConfigPaths from 'vite-tsconfig-paths'
 
-const config = defineConfig({
-  resolve: {
-    alias: {
-      '@': fileURLToPath(new URL('./src', import.meta.url)),
-    },
-  },
+export default defineConfig({
   build: {
-    // Target modern browsers for smaller bundle
-    target: 'es2020',
-    // Disable source maps in production for smaller bundle
-    sourcemap: false,
-    // Minify aggressively with terser
+    // Match TypeScript target for consistent compilation
+    target: 'es2022',
+    // Keep source maps for better error diagnostics
+    sourcemap: true,
+    // Minify with terser for better compression than default esbuild
     minify: 'terser',
     terserOptions: {
       compress: {
-        drop_console: true,
+        // Preserve console.error for error visibility - no error tracking service configured
+        // Only remove verbose logging to reduce bundle size
         drop_debugger: true,
+        pure_funcs: ['console.log', 'console.debug'],
       },
     },
-    // Optimize chunk size
-    chunkSizeWarningLimit: 500,
   },
   plugins: [
     devtools(),
     nitro({ rollupConfig: { external: [/^@sentry\//] } }),
-    // this is the plugin that enables path aliases
-    viteTsConfigPaths({
-      projects: ['./tsconfig.json'],
-    }),
+    viteTsConfigPaths({ projects: ['./tsconfig.json'] }),
     tailwindcss(),
     tanstackStart(),
     viteReact(),
   ],
 })
-
-export default config

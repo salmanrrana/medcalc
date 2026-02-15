@@ -242,7 +242,7 @@
     {
       "id": "81e6dd87-7431-454e-8b14-a760f9a08097",
       "title": "Phase 4: Performance optimization",
-      "passes": false,
+      "passes": true,
       "overview": "",
       "types": [],
       "designDecisions": [],
