@@ -6,8 +6,14 @@
 [build]
   command = "pnpm build"
   publish = ".output/public"
+  functions = ".output/server"
 
-[env]
+[env.production]
+  NITRO_PRESET = "netlify"
+  NODE_VERSION = "20"
+
+[env.deploy-preview]
+  NITRO_PRESET = "netlify"
   NODE_VERSION = "20"
 
 # Security headers for medical calculator application
