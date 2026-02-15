@@ -53,7 +53,7 @@
     {
       "id": "0f4ce78f-290c-42e9-b3ad-c577a1a83dee",
       "title": "Phase 1: Create TanStack Router structure",
-      "passes": false,
+      "passes": true,
       "overview": "",
       "types": [],
       "designDecisions": [],

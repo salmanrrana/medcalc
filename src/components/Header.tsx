@@ -1,10 +1,27 @@
 import { Link } from '@tanstack/react-router'
 
 import { useState } from 'react'
-import { Home, Menu, X, Calendar, Pill, Link as LinkIcon } from 'lucide-react'
+import { Home, Menu, X, Calendar, Pill, Link as LinkIcon, LucideIcon } from 'lucide-react'
+
+const NAV_LINK_CLASS = 'flex items-center gap-3 p-3 rounded-lg hover:bg-gray-800 transition-colors mb-2'
+const NAV_LINK_ACTIVE_CLASS = 'flex items-center gap-3 p-3 rounded-lg bg-cyan-600 hover:bg-cyan-700 transition-colors mb-2'
+
+interface NavItem {
+  to: string
+  icon: LucideIcon
+  label: string
+}
+
+const NAV_ITEMS: NavItem[] = [
+  { to: '/', icon: Home, label: 'Home' },
+  { to: '/transplant', icon: Calendar, label: 'Transplant' },
+  { to: '/chemo', icon: Pill, label: 'Chemotherapy' },
+  { to: '/links', icon: LinkIcon, label: 'Resources' },
+]
 
 export default function Header() {
   const [isOpen, setIsOpen] = useState(false)
+  const closeMenu = () => setIsOpen(false)
 
   return (
     <>
@@ -17,8 +34,8 @@ export default function Header() {
           <Menu size={24} />
         </button>
         <h1 className="ml-4 text-xl font-semibold">
-          <Link to="/">
-            <span className="text-white">MedCalc</span>
+          <Link to="/" className="text-white">
+            MedCalc
           </Link>
         </h1>
       </header>
@@ -31,7 +48,7 @@ export default function Header() {
         <div className="flex items-center justify-between p-4 border-b border-gray-700">
           <h2 className="text-xl font-bold">Navigation</h2>
           <button
-            onClick={() => setIsOpen(false)}
+            onClick={closeMenu}
             className="p-2 hover:bg-gray-800 rounded-lg transition-colors"
             aria-label="Close menu"
           >
@@ -40,57 +57,18 @@ export default function Header() {
         </div>
 
         <nav className="flex-1 p-4 overflow-y-auto">
-          <Link
-            to="/"
-            onClick={() => setIsOpen(false)}
-            className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-800 transition-colors mb-2"
-            activeProps={{
-              className:
-                'flex items-center gap-3 p-3 rounded-lg bg-cyan-600 hover:bg-cyan-700 transition-colors mb-2',
-            }}
-          >
-            <Home size={20} />
-            <span className="font-medium">Home</span>
-          </Link>
-
-          <Link
-            to="/transplant"
-            onClick={() => setIsOpen(false)}
-            className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-800 transition-colors mb-2"
-            activeProps={{
-              className:
-                'flex items-center gap-3 p-3 rounded-lg bg-cyan-600 hover:bg-cyan-700 transition-colors mb-2',
-            }}
-          >
-            <Calendar size={20} />
-            <span className="font-medium">Transplant</span>
-          </Link>
-
-          <Link
-            to="/chemo"
-            onClick={() => setIsOpen(false)}
-            className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-800 transition-colors mb-2"
-            activeProps={{
-              className:
-                'flex items-center gap-3 p-3 rounded-lg bg-cyan-600 hover:bg-cyan-700 transition-colors mb-2',
-            }}
-          >
-            <Pill size={20} />
-            <span className="font-medium">Chemotherapy</span>
-          </Link>
-
-          <Link
-            to="/links"
-            onClick={() => setIsOpen(false)}
-            className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-800 transition-colors mb-2"
-            activeProps={{
-              className:
-                'flex items-center gap-3 p-3 rounded-lg bg-cyan-600 hover:bg-cyan-700 transition-colors mb-2',
-            }}
-          >
-            <LinkIcon size={20} />
-            <span className="font-medium">Resources</span>
-          </Link>
+          {NAV_ITEMS.map(({ to, icon: Icon, label }) => (
+            <Link
+              key={to}
+              to={to}
+              onClick={closeMenu}
+              className={NAV_LINK_CLASS}
+              activeProps={{ className: NAV_LINK_ACTIVE_CLASS }}
+            >
+              <Icon size={20} />
+              <span className="font-medium">{label}</span>
+            </Link>
+          ))}
         </nav>
       </aside>
     </>
